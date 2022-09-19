@@ -1,0 +1,8 @@
+services:
+  App.controllers.HealthCheckController:
+    class: ./../../controllers/HealthCheckController
+    arguments: []
+
+  App.controllers.CustomerController:
+    class: ./../../controllers/CustomerController
+    arguments: ['@CustomerCredits.customer.CustomerService']

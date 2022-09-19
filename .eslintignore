@@ -1,0 +1,5 @@
+node_modules
+dist
+!**/.eslintrc*
+.gitignore
+jest.config.js

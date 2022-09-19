@@ -1,0 +1,5 @@
+!**/.eslintrc*
+.gitignore
+*.log
+dist
+node_modules*

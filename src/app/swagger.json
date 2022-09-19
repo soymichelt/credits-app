@@ -1,0 +1,242 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Credits App",
+    "description": "DDD implementation with ExpressJS, TypeScript & MongoDB",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "basePath": "/",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/health-check": {
+      "get": {
+        "tags": ["Health Check"],
+        "summary": "Get status app",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/customer": {
+      "get": {
+        "tags": ["Customer"],
+        "summary": "Get All Customers",
+        "parameters": [
+          {
+            "name": "customerToShow",
+            "in": "query",
+            "description": "Customers filter. 0 = all, 1 = onlyWithCredit, 2 = onlyWithoutCredit",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "schema": {
+            "$ref": "#/definitions/Customers"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Customer"],
+        "summary": "Create new customer",
+        "parameters": [
+          {
+            "name": "customer",
+            "in": "body",
+            "description": "Customer that we want to create",
+            "schema": {
+              "$ref": "#/definitions/CustomerUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "schema": {
+            "$ref": "#/definitions/SuccessResponse"
+          }
+        }
+      }
+    },
+    "/customer/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of Customer that we want to find",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Customer"],
+        "summary": "Get Customer by ID",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "schema": {
+            "$ref": "#/definitions/Customer"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Customer"],
+        "summary": "Update customer by ID",
+        "parameters": [
+          {
+            "name": "customer",
+            "in": "body",
+            "description": "Customer that we want to create",
+            "schema": {
+              "$ref": "#/definitions/CustomerUpdate"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "schema": {
+            "$ref": "#/definitions/SuccessResponse"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Customer by ID",
+        "tags": ["Customer"],
+        "responses": {
+          "200": {
+            "description": "Customer is deleted",
+            "schema": {
+              "$ref": "#/definitions/SuccessResponse"
+            }
+          }
+        }
+      }
+    },
+    "/customer/{id}/available-credit": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of Customer that we want to find",
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["Customer"],
+        "summary": "Update available amount of credit to customer by ID",
+        "parameters": [
+          {
+            "name": "customer",
+            "in": "body",
+            "description": "Customer that we want to create",
+            "schema": {
+              "$ref": "#/definitions/CustomerUpdateAmount"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "schema": {
+            "$ref": "#/definitions/SuccessResponse"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Customer": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "dni": {
+          "type": "string"
+        },
+        "names": {
+          "type": "string"
+        },
+        "lastnames": {
+          "type": "string"
+        },
+        "ageDate": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "amountAvailableOfCredit": {
+          "type": "number"
+        }
+      }
+    },
+    "Customers": {
+      "properties": {
+        "customers": {
+          "type": "array",
+          "$ref": "#/definitions/Customer"
+        }
+      }
+    },
+    "CustomerUpdate": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "dni": {
+          "type": "string"
+        },
+        "names": {
+          "type": "string"
+        },
+        "lastnames": {
+          "type": "string"
+        },
+        "ageDate": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        }
+      }
+    },
+    "SuccessResponse": {
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "CustomerUpdateAmount": {
+      "properties": {
+        "amountAvailableOfCredit": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}

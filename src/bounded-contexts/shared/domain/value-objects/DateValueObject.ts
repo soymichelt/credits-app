@@ -4,6 +4,10 @@ export class DateValueObject {
   readonly value: Date
 
   constructor(value: Date) {
+    if (!value) {
+      throw new ArgumentIsRequired('Date')
+    }
+
     this.value = value
   }
 

@@ -1,5 +1,11 @@
 {
   "extends": "./tsconfig",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "noEmit": false,
+    "pretty": true,
+    "removeComments": true
+  },
   "exclude": [
     "node_modules",
     "**/__mocks__/*",

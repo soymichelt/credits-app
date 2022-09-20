@@ -80,8 +80,13 @@ export class App {
   }
 
   private configSentry(): void {
+    const sentryDsn = process.env.SENTRY_DSN
+    if (sentryDsn) {
+      return
+    }
+
     Sentry.init({
-      dsn: 'https://372aff5f8830400ca7d26d0deae893b5@o298634.ingest.sentry.io/6756298',
+      dsn: sentryDsn,
       integrations: [
         // enable HTTP calls tracing
         new Sentry.Integrations.Http({ tracing: true }),

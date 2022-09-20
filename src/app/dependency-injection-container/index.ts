@@ -1,16 +1,21 @@
-import { ContainerBuilder, YamlFileLoader } from 'node-dependency-injection'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { ContainerBuilder, JsonFileLoader } from 'node-dependency-injection'
+
+import appDI from './app/application.json'
+import application from './application.json'
+import customerDI from './customer/application.json'
 
 export class DependencyInjectionContainer {
   private container: ContainerBuilder
-  private loader: YamlFileLoader
+  private loader: JsonFileLoader
 
   private static instance: DependencyInjectionContainer
 
   private constructor() {
     this.container = new ContainerBuilder()
-    this.loader = new YamlFileLoader(this.container)
+    this.loader = new JsonFileLoader(this.container)
 
-    const applicationPath = `${__dirname}/application.yaml`
+    const applicationPath = `${__dirname}/application.json`
     this.loader.load(applicationPath)
   }
 

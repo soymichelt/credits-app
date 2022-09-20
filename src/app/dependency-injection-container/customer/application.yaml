@@ -1,8 +1,0 @@
-services:
-  CustomerCredits.customer.CustomerMongoRepository:
-    class: ./../../../bounded-contexts/customer-credits/customers/infraestructure/CustomerMongoRepository
-    arguments: []
-
-  CustomerCredits.customer.CustomerService:
-    class: ./../../../bounded-contexts/customer-credits/customers/application/CustomerService
-    arguments: ['@CustomerCredits.customer.CustomerMongoRepository']

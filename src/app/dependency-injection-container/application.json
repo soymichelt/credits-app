@@ -1,0 +1,6 @@
+{
+  "imports": [
+    {"resource": "./app/application.json"},
+    {"resource": "./customer/application.json"}
+  ]
+}

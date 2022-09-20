@@ -1,3 +1,4 @@
+import { ArgumentIsRequired } from '@/bounded-contexts/shared/domain/exceptions/ArgumentIsRequired'
 import { InvalidArgumentError } from '@/bounded-contexts/shared/domain/value-objects/BaseValueObject'
 import { DateValueObject } from '@/bounded-contexts/shared/domain/value-objects/DateValueObject'
 
@@ -11,6 +12,10 @@ export class CustomerDateOfBirth extends DateValueObject {
   }
 
   private validate(value: Date): void {
+    if (!value) {
+      throw new ArgumentIsRequired('Customer Date Of Birth')
+    }
+
     const customerAge = this.calculateAge(value)
     if (customerAge < MINIMUN_AGE_ALLOWED) {
       throw new InvalidArgumentError(

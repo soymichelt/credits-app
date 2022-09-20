@@ -1,3 +1,4 @@
+import { ArgumentIsRequired } from '@/bounded-contexts/shared/domain/exceptions/ArgumentIsRequired'
 import { InvalidArgumentError } from '@/bounded-contexts/shared/domain/value-objects/BaseValueObject'
 import { StringValueObject } from '@/bounded-contexts/shared/domain/value-objects/StringValueObject'
 
@@ -12,6 +13,10 @@ export class CustomerName extends StringValueObject {
   }
 
   private validate(value: string): void {
+    if (!value) {
+      throw new ArgumentIsRequired('Names or Lastnames')
+    }
+
     if (value.length < MINIMUM_LENGTH_NAME) {
       throw new InvalidArgumentError(
         `El nombre del cliente "${value}" tiene menos de ${MINIMUM_LENGTH_NAME} carácteres`

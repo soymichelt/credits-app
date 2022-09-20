@@ -1,3 +1,4 @@
+import { ArgumentIsRequired } from '../exceptions/ArgumentIsRequired'
 import { InvalidArgumentError } from './BaseValueObject'
 import { StringValueObject } from './StringValueObject'
 
@@ -9,6 +10,10 @@ export class PhoneValueObject extends StringValueObject {
   }
 
   private validate(value: string): void {
+    if (!value) {
+      throw new ArgumentIsRequired('Phone')
+    }
+
     const regexPhoneValidator = /^\(?(\d{3})\)?[- ]?(\d{4})[- ]?(\d{4})$/
     if (!regexPhoneValidator.test(value)) {
       throw new InvalidArgumentError(`El teléfono ${value} tiene formato incorrecto. Ejemplo: (505) 8367-1719`)

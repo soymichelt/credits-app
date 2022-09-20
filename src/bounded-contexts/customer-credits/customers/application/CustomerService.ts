@@ -3,6 +3,7 @@ import { Nullable } from '@/bounded-contexts/shared/domain/nullable'
 import { Customer } from '../domain/Customer'
 import { CustomerRepository, CustomerToShow } from '../domain/CustomerRepository'
 import { CustomerAlreadyExists } from '../domain/exceptions/CustomerAlreadyExists'
+import { CustomerIdAlreadyExists } from '../domain/exceptions/CustomerIdAlreadyExists'
 import { CustomerNotExists } from '../domain/exceptions/CustomerNotExists'
 import { CustomerAvailableAmountOfCredit } from '../domain/value-objects/CustomerAvailableAmountOfCredit'
 import { CustomerId } from '../domain/value-objects/CustomerId'
@@ -15,6 +16,10 @@ export class CustomerService {
   }
 
   async create(customer: Customer): Promise<void> {
+    const customerById = await this.repository.select(customer.customerId)
+    if (customerById) {
+      throw new CustomerIdAlreadyExists(customer.customerId.value)
+    }
     const customerByDni = await this.repository.selectByDni(customer.dni)
     if (customerByDni) {
       throw new CustomerAlreadyExists(customer.dni.value)

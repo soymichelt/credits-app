@@ -1,3 +1,5 @@
+import { ArgumentIsRequired } from '../exceptions/ArgumentIsRequired'
+
 export class DateValueObject {
   readonly value: Date
 
@@ -6,6 +8,10 @@ export class DateValueObject {
   }
 
   static buildFromString(value: string): DateValueObject {
+    if (!value) {
+      throw new ArgumentIsRequired('Date')
+    }
+
     const date = new Date(value)
     return new DateValueObject(date)
   }

@@ -6,6 +6,7 @@
     "pretty": true,
     "removeComments": true
   },
+  "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "**/__mocks__/*",

@@ -2,13 +2,13 @@
   "name": "credit-app",
   "version": "1.0.0",
   "description": "credit-app",
-  "main": "./dist/index.js",
+  "main": "./dist/app/index.js",
   "scripts": {
     "dev": "tsnd --project tsconfig.json --files --respawn --transpile-only --ignore-watch node_modules -r tsconfig-paths/register -- ./src/app/index.ts",
     "build": "npm run lint && npm run test && npm run build:tsc",
     "build:clean": "rm -f tsconfig.build.tsbuildinfo && rm -Rf ./dist/* ; exit 0",
     "build:tsc": "tsc -p tsconfig.build.json && resolve-tspaths -p tsconfig.json -s ./src -o ./dist",
-    "start": "node ./dist/index.js",
+    "start": "node ./dist/app/index.js",
     "test": "jest --runInBand --detectOpenHandles",
     "lint": "eslint ./**/*.ts",
     "lint:fix": "eslint ./**/*.ts --fix"

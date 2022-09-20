@@ -22,7 +22,7 @@ export class CustomerController implements BaseController {
         })
       }
       resCallback(200, {
-        data: { ...(customer?.toPrimitive() ?? {}) }
+        data: { customer: customer?.toPrimitive() ?? {} }
       })
     })
   }

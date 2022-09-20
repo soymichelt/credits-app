@@ -10,7 +10,7 @@
     }
   },
   "basePath": "/",
-  "schemes": ["http"],
+  "schemes": ["http", "https"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
   "paths": {
@@ -44,7 +44,7 @@
             "description": "OK"
           },
           "schema": {
-            "$ref": "#/definitions/Customers"
+            "$ref": "#/definitions/ApiResponse"
           }
         }
       },
@@ -66,7 +66,7 @@
             "description": "OK"
           },
           "schema": {
-            "$ref": "#/definitions/SuccessResponse"
+            "$ref": "#/definitions/ApiResponse"
           }
         }
       }
@@ -89,7 +89,7 @@
             "description": "OK"
           },
           "schema": {
-            "$ref": "#/definitions/Customer"
+            "$ref": "#/definitions/ApiResponse"
           }
         }
       },
@@ -111,7 +111,7 @@
             "description": "OK"
           },
           "schema": {
-            "$ref": "#/definitions/SuccessResponse"
+            "$ref": "#/definitions/ApiResponse"
           }
         }
       },
@@ -122,7 +122,7 @@
           "200": {
             "description": "Customer is deleted",
             "schema": {
-              "$ref": "#/definitions/SuccessResponse"
+              "$ref": "#/definitions/ApiResponse"
             }
           }
         }
@@ -156,7 +156,7 @@
             "description": "OK"
           },
           "schema": {
-            "$ref": "#/definitions/SuccessResponse"
+            "$ref": "#/definitions/ApiResponse"
           }
         }
       }
@@ -191,14 +191,6 @@
         }
       }
     },
-    "Customers": {
-      "properties": {
-        "customers": {
-          "type": "array",
-          "$ref": "#/definitions/Customer"
-        }
-      }
-    },
     "CustomerUpdate": {
       "properties": {
         "id": {
@@ -224,10 +216,29 @@
         }
       }
     },
-    "SuccessResponse": {
+    "DataResponse": {
+      "properties": {
+        "customer": {
+          "type": "object",
+          "$ref": "#/definitions/Customer"
+        },
+        "customers": {
+          "type": "array",
+          "$ref": "#/definitions/Customer"
+        }
+      }
+    },
+    "ApiResponse": {
       "properties": {
         "message": {
           "type": "string"
+        },
+        "error": {
+          "type": "string"
+        },
+        "data": {
+          "type": "object",
+          "$ref": "#/definitions/DataResponse"
         }
       }
     },

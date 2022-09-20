@@ -1,9 +1,14 @@
 import { Request, Response } from 'express'
 
+import { ResponseCallback, ResponseFactory } from '../helpers/ResponseFactory'
 import { BaseController } from './BaseController'
 
 export class HealthCheckController implements BaseController {
   async get(req: Request, res: Response) {
-    res.status(200).send('Backend is running 😇😇😇')
+    ResponseFactory.build(res, async (resCallback: ResponseCallback) => {
+      resCallback(200, {
+        message: 'Backend is running 😇😇😇'
+      })
+    })
   }
 }

@@ -4,7 +4,7 @@
 
 Aplicación de prueba implementada con TypeScript, que sigue las pautas de **Domain Driven Design** y que fue diseñada usando como base la Arquitectura Hexagonal. La infraestructura de la aplicación cuenta de dos partes: los `controladores` que fueron desarrollados con ExpressJS y los `repositorios` implementan MongoDB. Para el desarrollo de pruebas el proyecto cuenta con la configuración de Jest.
 
-Para respetar las **buenas prácticas** el proyecto cuenta con una configuración de ESLint y de Prettier, con reglas bases de código y la guía de estilos de TypeScript recomendada. Ambos procesos se están ejecutando, en conjunto con los `tests`, en un sistema de Despliegue Continuo (CD), que fue configurado con Railway App, en la rama `Main`.
+Para respetar las **buenas prácticas** el proyecto cuenta con una configuración de ESLint y de Prettier, con reglas bases de código y la guía de estilos de TypeScript recomendada. Ambos procesos se están ejecutando, en conjunto con los `tests`, en un sistema de Integración Continua (CI) y Despliegue Continuo (CD), que fue configurado usando GitHub Actions con Railway App. El CI y CD están escuchando los eventos de **Push** y **Pull Request** en la rama `Main`.
 
 ## Instalación
 
@@ -57,6 +57,8 @@ La respuesta de este endpoint será lo siguiente:
       ageDate	string
       email	string
       phone	string
+      income	number
+      amountAvailableOfCredit	number
     }]
   }
 ```
@@ -77,6 +79,8 @@ La respuesta de este endpoint será lo siguiente:
       ageDate	string
       email	string
       phone	string
+      icome	number
+      amountAvailableOfCredit	number
     }
   }
 ```
@@ -92,6 +96,7 @@ La respuesta de este endpoint será lo siguiente:
     ageDate	string
     email	string
     phone	string
+    income	number
   }
 ```
 
@@ -106,6 +111,7 @@ La respuesta de este endpoint será lo siguiente:
     ageDate	string
     email	string
     phone	string
+    income	number
   }
 ```
 
@@ -122,10 +128,6 @@ La respuesta de este endpoint será lo siguiente:
 ## Depuración
 
 La aplicación actualmente está configurada para utilizar SENTRY como plataforma Cloud para tracking de errores. Para poder utilizarlo solo configure la variable de entorno `SENTRY_DSN` y empezará a recibir notificaciones de errores de su aplicación.
-
-## Propuesta a futuro
-
-😵‍💫 Configuración de un sistema de Continuous Integration.
 
 ## Demo
 

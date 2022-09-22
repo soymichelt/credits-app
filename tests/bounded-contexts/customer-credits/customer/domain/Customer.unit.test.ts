@@ -4,6 +4,7 @@ import { CustomerDateOfBirth } from '@/bounded-contexts/customer-credits/custome
 import { CustomerDni } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerDni'
 import { CustomerEmail } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerEmail'
 import { CustomerId } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerId'
+import { CustomerIncome } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerIncome'
 import { CustomerName } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerName'
 import { CustomerPhone } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerPhone'
 import { InvalidArgumentError } from '@/bounded-contexts/shared/domain/value-objects/BaseValueObject'
@@ -21,6 +22,7 @@ describe('Customer', () => {
       ageDate: new CustomerDateOfBirth(dateOfBirth),
       phone: new CustomerPhone('(505) 8367-1719'),
       email: new CustomerEmail('mtraatabladaa94@gmail.com'),
+      income: new CustomerIncome(4000),
       amountAvailableOfCredit: new CustomerAvailableAmountOfCredit(0)
     })
 
@@ -31,6 +33,7 @@ describe('Customer', () => {
     expect(customer.ageDate.value).toBe(dateOfBirth)
     expect(customer.phone.value).toBe('(505) 8367-1719')
     expect(customer.email.value).toBe('mtraatabladaa94@gmail.com')
+    expect(customer.income.value).toBe(4000)
     expect(customer.amountAvailableOfCredit.value).toBe(0)
   })
 
@@ -45,6 +48,7 @@ describe('Customer', () => {
     expect(customer.ageDate.value).toBe(customerPrimitives.ageDate)
     expect(customer.phone.value).toBe(customerPrimitives.phone)
     expect(customer.email.value).toBe(customerPrimitives.email)
+    expect(customer.income.value).toBe(customerPrimitives.income)
     expect(customer.amountAvailableOfCredit.value).toBe(customerPrimitives.amountAvailableOfCredit)
   })
 

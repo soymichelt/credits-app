@@ -34,6 +34,7 @@ describe('Customer Service', () => {
       ageDate: customer.ageDate.value,
       email: customer.email.value,
       phone: customer.phone.value,
+      income: customer.income.value,
       amountAvailableOfCredit: customer.amountAvailableOfCredit.value
     })
 
@@ -139,6 +140,7 @@ describe('Customer Service', () => {
       ageDate: CustomerMotherCreator.customerAgeDateRandom(),
       email: CustomerMotherCreator.customerEmailRandom(),
       phone: CustomerMotherCreator.customerPhoneRandom(),
+      income: CustomerMotherCreator.customerIncomeRandom(),
       amountAvailableOfCredit: CustomerMotherCreator.customerAmountRandom()
     })
 

@@ -4,6 +4,7 @@ import { CustomerDateOfBirth } from '@/bounded-contexts/customer-credits/custome
 import { CustomerDni } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerDni'
 import { CustomerEmail } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerEmail'
 import { CustomerId } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerId'
+import { CustomerIncome } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerIncome'
 import { CustomerName } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerName'
 import { CustomerPhone } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerPhone'
 
@@ -22,6 +23,7 @@ export class CustomerMotherCreator {
       ageDate: this.customerAgeDateRandom(),
       email: this.customerEmailRandom(),
       phone: this.customerPhoneRandom(),
+      income: this.customerIncomeRandom(),
       amountAvailableOfCredit: this.customerAmountRandom()
     })
   }
@@ -35,6 +37,7 @@ export class CustomerMotherCreator {
       ageDate: this.customerAgeDateInvalid(),
       email: this.customerEmailInvalid(),
       phone: this.customerPhoneInvalid(),
+      income: this.customerIncomeInvalid(),
       amountAvailableOfCredit: this.customerAmountInvalid()
     })
   }
@@ -91,6 +94,15 @@ export class CustomerMotherCreator {
     return new CustomerAvailableAmountOfCredit(availableAmount)
   }
 
+  static customerIncomeRandom(): CustomerIncome {
+    const income = ObjectMotherCreator.random().random.float({
+      min: 0,
+      max: 500000,
+      precision: 2
+    })
+    return new CustomerIncome(income)
+  }
+
   static customerIdInvalid(): CustomerId {
     const guidRandom = GuidMotherCreator.random()
     const guidInvalid = guidRandom.substring(6)
@@ -140,5 +152,14 @@ export class CustomerMotherCreator {
       precision: 2
     })
     return new CustomerAvailableAmountOfCredit(availableAmount)
+  }
+
+  static customerIncomeInvalid(): CustomerIncome {
+    const income = ObjectMotherCreator.random().random.float({
+      min: -500000,
+      max: -1,
+      precision: 2
+    })
+    return new CustomerIncome(income)
   }
 }

@@ -5,6 +5,7 @@ import { CustomerDateOfBirth } from './value-objects/CustomerDateOfBirth'
 import { CustomerDni } from './value-objects/CustomerDni'
 import { CustomerEmail } from './value-objects/CustomerEmail'
 import { CustomerId } from './value-objects/CustomerId'
+import { CustomerIncome } from './value-objects/CustomerIncome'
 import { CustomerName } from './value-objects/CustomerName'
 import { CustomerPhone } from './value-objects/CustomerPhone'
 
@@ -16,6 +17,7 @@ interface CustomerProps {
   ageDate: CustomerDateOfBirth
   email: CustomerEmail
   phone: CustomerPhone
+  income: CustomerIncome
   amountAvailableOfCredit: CustomerAvailableAmountOfCredit
 }
 
@@ -27,6 +29,7 @@ interface CustomerPrimitivesProps {
   ageDate: Date
   email: string
   phone: string
+  income: number
   amountAvailableOfCredit?: number
 }
 
@@ -38,9 +41,20 @@ export class Customer extends AggregateRoot {
   readonly ageDate: CustomerDateOfBirth
   readonly email: CustomerEmail
   readonly phone: CustomerPhone
+  readonly income: CustomerIncome
   readonly amountAvailableOfCredit: CustomerAvailableAmountOfCredit
 
-  constructor({ customerId, dni, names, lastnames, ageDate, email, phone, amountAvailableOfCredit }: CustomerProps) {
+  constructor({
+    customerId,
+    dni,
+    names,
+    lastnames,
+    ageDate,
+    email,
+    phone,
+    income,
+    amountAvailableOfCredit
+  }: CustomerProps) {
     super()
 
     this.customerId = customerId
@@ -50,6 +64,7 @@ export class Customer extends AggregateRoot {
     this.ageDate = ageDate
     this.email = email
     this.phone = phone
+    this.income = income
     this.amountAvailableOfCredit = amountAvailableOfCredit
   }
 
@@ -75,6 +90,7 @@ export class Customer extends AggregateRoot {
     ageDate,
     email,
     phone,
+    income,
     amountAvailableOfCredit
   }: CustomerPrimitivesProps): Customer {
     return new Customer({
@@ -85,6 +101,7 @@ export class Customer extends AggregateRoot {
       ageDate: new CustomerDateOfBirth(ageDate),
       email: new CustomerEmail(email),
       phone: new CustomerPhone(phone),
+      income: new CustomerIncome(income),
       amountAvailableOfCredit: new CustomerAvailableAmountOfCredit(amountAvailableOfCredit || 0)
     })
   }
@@ -98,6 +115,7 @@ export class Customer extends AggregateRoot {
       ageDate: this.ageDate.value,
       email: this.email.value,
       phone: this.phone.value,
+      income: this.income.value,
       amountAvailableOfCredit: this.amountAvailableOfCredit.value || 0
     }
   }

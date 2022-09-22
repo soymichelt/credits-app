@@ -60,7 +60,8 @@ export class CustomerMongoRepository extends MongoRepository<Customer> implement
       ageDate: document.ageDate,
       email: document.email,
       phone: document.phone,
-      amountAvailableOfCredit: document.amountAvailableOfCredit
+      income: document.income ?? 0,
+      amountAvailableOfCredit: document.amountAvailableOfCredit ?? 0
     })
   }
 
@@ -80,7 +81,8 @@ export class CustomerMongoRepository extends MongoRepository<Customer> implement
       ageDate: document.ageDate,
       email: document.email,
       phone: document.phone,
-      amountAvailableOfCredit: document.amountAvailableOfCredit
+      income: document.income ?? 0,
+      amountAvailableOfCredit: document.amountAvailableOfCredit ?? 0
     })
   }
 
@@ -111,7 +113,8 @@ export class CustomerMongoRepository extends MongoRepository<Customer> implement
         ageDate: document.ageDate,
         email: document.email,
         phone: document.phone,
-        amountAvailableOfCredit: document.amountAvailableOfCredit
+        income: document.income ?? 0,
+        amountAvailableOfCredit: document.amountAvailableOfCredit ?? 0
       })
       customers.push(customer)
     })

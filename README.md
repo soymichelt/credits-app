@@ -132,3 +132,7 @@ La aplicación actualmente está configurada para utilizar SENTRY como plataform
 Puede consultar una demo de la aplicación ejecutándose en la siguiente URL:
 
 https://credits-app-production.up.railway.app/docs/
+
+No olvide seleccionar el Scheme HTTPS 😅
+
+![imagen](https://user-images.githubusercontent.com/17261237/191336725-c30a2cab-d2c3-4303-b1f5-b306b7e30449.png)

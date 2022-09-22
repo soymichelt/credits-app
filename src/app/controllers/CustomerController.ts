@@ -49,7 +49,8 @@ export class CustomerController implements BaseController {
         lastnames: req.body.lastnames,
         ageDate: new Date(req.body.ageDate),
         email: req.body.email,
-        phone: req.body.phone
+        phone: req.body.phone,
+        income: req.body.income
       })
 
       await this.service.create(customer)
@@ -69,7 +70,8 @@ export class CustomerController implements BaseController {
         lastnames: req.body.lastnames,
         ageDate: new Date(req.body.ageDate),
         email: req.body.email,
-        phone: req.body.phone
+        phone: req.body.phone,
+        income: req.body.income
       })
 
       await this.service.update(customer)

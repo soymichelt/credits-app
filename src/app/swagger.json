@@ -186,6 +186,9 @@
         "phone": {
           "type": "string"
         },
+        "income": {
+          "type": "number"
+        },
         "amountAvailableOfCredit": {
           "type": "number"
         }
@@ -213,6 +216,9 @@
         },
         "phone": {
           "type": "string"
+        },
+        "income": {
+          "type": "number"
         }
       }
     },

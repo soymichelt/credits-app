@@ -1,3 +1,4 @@
+import { CustomerCreditEnabled } from '@/bounded-contexts/customer-credits/shared/domain/value-objects/CustomerCreditEnabled'
 import { Nullable } from '@/bounded-contexts/shared/domain/nullable'
 
 import { Customer } from '../../../../../../src/bounded-contexts/customer-credits/customers/domain/Customer'
@@ -5,9 +6,8 @@ import {
   CustomerRepository,
   CustomerToShow
 } from '../../../../../../src/bounded-contexts/customer-credits/customers/domain/CustomerRepository'
-import { CustomerAvailableAmountOfCredit } from '../../../../../../src/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerAvailableAmountOfCredit'
 import { CustomerDni } from '../../../../../../src/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerDni'
-import { CustomerId } from '../../../../../../src/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerId'
+import { CustomerId } from '../../../../../../src/bounded-contexts/customer-credits/shared/domain/value-objects/CustomerId'
 
 export class CustomerMockRepository implements CustomerRepository {
   private customers: Array<Customer> = []
@@ -19,19 +19,6 @@ export class CustomerMockRepository implements CustomerRepository {
   async update(customerUpdated: Customer): Promise<void> {
     const customerIndex = this.customers.findIndex((customer) => {
       return customer.customerId.value === customerUpdated.customerId.value
-    })
-
-    this.customers[customerIndex] = customerUpdated
-  }
-
-  async addAmountOfCredit(customerId: CustomerId, amount: CustomerAvailableAmountOfCredit): Promise<void> {
-    const customerIndex = this.customers.findIndex((customer) => {
-      return customer.customerId.value === customerId.value
-    })
-
-    const customerUpdated: Customer = new Customer({
-      ...this.customers[customerIndex],
-      amountAvailableOfCredit: amount
     })
 
     this.customers[customerIndex] = customerUpdated
@@ -61,20 +48,29 @@ export class CustomerMockRepository implements CustomerRepository {
 
   async all(filter?: CustomerToShow): Promise<Customer[]> {
     switch (filter) {
-      case CustomerToShow.all:
-        return this.customers
       case CustomerToShow.onlyWithCredit: {
-        return this.customers.filter((customer) => {
-          return customer.amountAvailableOfCredit.value > 0
-        })
+        const customersWithCredit = this.customers.filter((customer) => customer.creditEnabled.value)
+        return customersWithCredit
       }
       case CustomerToShow.onlyWithoutCredit: {
-        return this.customers.filter((customer) => {
-          return customer.amountAvailableOfCredit.value === 0
-        })
+        const customersWithoutCredit = this.customers.filter((customer) => !customer.creditEnabled.value)
+        return customersWithoutCredit
       }
+      case CustomerToShow.all:
       default:
         return this.customers
     }
+  }
+
+  async enableCreditToCustomer(customerId: CustomerId, enabled: CustomerCreditEnabled): Promise<void> {
+    const customerIndex = this.customers.findIndex((customer) => customer.customerId.equalTo(customerId))
+    if (customerIndex < 0) return
+
+    const customerUpdated = new Customer({
+      ...this.customers[customerIndex],
+      creditEnabled: enabled
+    })
+
+    this.customers[customerIndex] = customerUpdated
   }
 }

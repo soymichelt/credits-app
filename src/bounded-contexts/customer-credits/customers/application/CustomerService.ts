@@ -1,18 +1,21 @@
 import { Nullable } from '@/bounded-contexts/shared/domain/nullable'
 
+import { IUnitOfWork } from '../../shared/domain/IUnitOfWork'
+import { CustomerId } from '../../shared/domain/value-objects/CustomerId'
 import { Customer } from '../domain/Customer'
 import { CustomerRepository, CustomerToShow } from '../domain/CustomerRepository'
 import { CustomerAlreadyExists } from '../domain/exceptions/CustomerAlreadyExists'
 import { CustomerIdAlreadyExists } from '../domain/exceptions/CustomerIdAlreadyExists'
 import { CustomerNotExists } from '../domain/exceptions/CustomerNotExists'
-import { CustomerAvailableAmountOfCredit } from '../domain/value-objects/CustomerAvailableAmountOfCredit'
-import { CustomerId } from '../domain/value-objects/CustomerId'
+import { CustomerToDeleteContainsCredits } from '../domain/exceptions/CustomerToDeleteContainsCredits'
 
 export class CustomerService {
+  private unitOfWork: IUnitOfWork
   private repository: CustomerRepository
 
-  constructor(repository: CustomerRepository) {
-    this.repository = repository
+  constructor(unitOfWork: IUnitOfWork) {
+    this.unitOfWork = unitOfWork
+    this.repository = this.unitOfWork.customerRepository
   }
 
   async create(customer: Customer): Promise<void> {
@@ -24,7 +27,11 @@ export class CustomerService {
     if (customerByDni) {
       throw new CustomerAlreadyExists(customer.dni.value)
     }
-    await this.repository.create(customer)
+    const customerWithoutCreditEnabled = Customer.buildFromPrimitives({
+      ...customer.toPrimitive(),
+      creditEnabled: false
+    })
+    await this.repository.create(customerWithoutCreditEnabled)
   }
 
   async update(customer: Customer): Promise<void> {
@@ -33,19 +40,20 @@ export class CustomerService {
       throw new CustomerNotExists(customer.customerId.value)
     }
 
-    await this.repository.update(customer)
-  }
+    const customerWithoutCreditEnabled = Customer.buildFromPrimitives({
+      ...customer.toPrimitive(),
+      creditEnabled: customerById.creditEnabled.value
+    })
 
-  async addAmountOfCredit(customerId: CustomerId, amount: CustomerAvailableAmountOfCredit) {
-    const customerById = await this.select(customerId)
-    if (!customerById) {
-      throw new CustomerNotExists(customerId.value)
-    }
-
-    await this.repository.addAmountOfCredit(customerId, amount)
+    await this.repository.update(customerWithoutCreditEnabled)
   }
 
   async remove(customerId: CustomerId): Promise<void> {
+    const credits = await this.unitOfWork.creditRepository.all(customerId)
+    if (credits.length > 0) {
+      throw new CustomerToDeleteContainsCredits(customerId.value)
+    }
+
     await this.repository.remove(customerId)
   }
 

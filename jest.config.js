@@ -3,12 +3,6 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   preset: 'ts-jest',
-  globals: {
-    "ts-jest": {
-      tsconfig: "tsconfig.json",
-      isolatedModules: true
-    },
-  },
   moduleFileExtensions: [ "ts", "js" ],
   moduleNameMapper: {
     '@/(.*)$': ['<rootDir>/src/$1']

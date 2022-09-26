@@ -1,17 +1,17 @@
 import { Customer } from '@/bounded-contexts/customer-credits/customers/domain/Customer'
-import { CustomerAvailableAmountOfCredit } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerAvailableAmountOfCredit'
 import { CustomerDateOfBirth } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerDateOfBirth'
 import { CustomerDni } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerDni'
 import { CustomerEmail } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerEmail'
-import { CustomerId } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerId'
 import { CustomerIncome } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerIncome'
 import { CustomerName } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerName'
 import { CustomerPhone } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerPhone'
+import { CustomerId } from '@/bounded-contexts/customer-credits/shared/domain/value-objects/CustomerId'
 
-import { EmailMotherCreator } from '../../shared/domain/EmailMotherCreator'
-import { GuidMotherCreator } from '../../shared/domain/GuidMotherCreator'
-import { ObjectMotherCreator } from '../../shared/domain/ObjectMotherCreator'
-import { PhoneMotherCreator } from '../../shared/domain/PhoneMotherCreator'
+import { EmailMotherCreator } from '../../../shared/domain/EmailMotherCreator'
+import { GuidMotherCreator } from '../../../shared/domain/GuidMotherCreator'
+import { ObjectMotherCreator } from '../../../shared/domain/ObjectMotherCreator'
+import { PhoneMotherCreator } from '../../../shared/domain/PhoneMotherCreator'
+import { CustomerCreditEnabledMotherCreator } from '../../shared/domain/CustomerCreditEnabledMotherCreator'
 
 export class CustomerMotherCreator {
   static random(): Customer {
@@ -24,7 +24,7 @@ export class CustomerMotherCreator {
       email: this.customerEmailRandom(),
       phone: this.customerPhoneRandom(),
       income: this.customerIncomeRandom(),
-      amountAvailableOfCredit: this.customerAmountRandom()
+      creditEnabled: CustomerCreditEnabledMotherCreator.random()
     })
   }
 
@@ -38,7 +38,7 @@ export class CustomerMotherCreator {
       email: this.customerEmailInvalid(),
       phone: this.customerPhoneInvalid(),
       income: this.customerIncomeInvalid(),
-      amountAvailableOfCredit: this.customerAmountInvalid()
+      creditEnabled: CustomerCreditEnabledMotherCreator.random()
     })
   }
 
@@ -83,15 +83,6 @@ export class CustomerMotherCreator {
   static customerPhoneRandom(): CustomerPhone {
     const phoneRandom = PhoneMotherCreator.random()
     return new CustomerPhone(phoneRandom)
-  }
-
-  static customerAmountRandom(): CustomerAvailableAmountOfCredit {
-    const availableAmount = ObjectMotherCreator.random().random.float({
-      min: 0,
-      max: 500000,
-      precision: 2
-    })
-    return new CustomerAvailableAmountOfCredit(availableAmount)
   }
 
   static customerIncomeRandom(): CustomerIncome {
@@ -143,15 +134,6 @@ export class CustomerMotherCreator {
   static customerPhoneInvalid(): CustomerPhone {
     const phoneInvalid = PhoneMotherCreator.invalid()
     return new CustomerPhone(phoneInvalid)
-  }
-
-  static customerAmountInvalid(): CustomerAvailableAmountOfCredit {
-    const availableAmount = ObjectMotherCreator.random().random.float({
-      min: -500000,
-      max: -1,
-      precision: 2
-    })
-    return new CustomerAvailableAmountOfCredit(availableAmount)
   }
 
   static customerIncomeInvalid(): CustomerIncome {

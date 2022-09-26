@@ -1,12 +1,12 @@
 import { Customer } from '@/bounded-contexts/customer-credits/customers/domain/Customer'
-import { CustomerAvailableAmountOfCredit } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerAvailableAmountOfCredit'
 import { CustomerDateOfBirth } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerDateOfBirth'
 import { CustomerDni } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerDni'
 import { CustomerEmail } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerEmail'
-import { CustomerId } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerId'
 import { CustomerIncome } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerIncome'
 import { CustomerName } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerName'
 import { CustomerPhone } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerPhone'
+import { CustomerCreditEnabled } from '@/bounded-contexts/customer-credits/shared/domain/value-objects/CustomerCreditEnabled'
+import { CustomerId } from '@/bounded-contexts/customer-credits/shared/domain/value-objects/CustomerId'
 import { InvalidArgumentError } from '@/bounded-contexts/shared/domain/value-objects/BaseValueObject'
 
 import { CustomerMotherCreator } from './CustomerMotherCreator'
@@ -23,7 +23,7 @@ describe('Customer', () => {
       phone: new CustomerPhone('(505) 8367-1719'),
       email: new CustomerEmail('mtraatabladaa94@gmail.com'),
       income: new CustomerIncome(4000),
-      amountAvailableOfCredit: new CustomerAvailableAmountOfCredit(0)
+      creditEnabled: new CustomerCreditEnabled(false)
     })
 
     expect(customer.customerId.value).toBe('82682a1b-40a9-4419-a901-3bbeaef0d74b')
@@ -34,7 +34,7 @@ describe('Customer', () => {
     expect(customer.phone.value).toBe('(505) 8367-1719')
     expect(customer.email.value).toBe('mtraatabladaa94@gmail.com')
     expect(customer.income.value).toBe(4000)
-    expect(customer.amountAvailableOfCredit.value).toBe(0)
+    expect(customer.creditEnabled.value).toBe(false)
   })
 
   it('Creando customer random', () => {
@@ -49,7 +49,6 @@ describe('Customer', () => {
     expect(customer.phone.value).toBe(customerPrimitives.phone)
     expect(customer.email.value).toBe(customerPrimitives.email)
     expect(customer.income.value).toBe(customerPrimitives.income)
-    expect(customer.amountAvailableOfCredit.value).toBe(customerPrimitives.amountAvailableOfCredit)
   })
 
   it('Creando customer inválido', () => {

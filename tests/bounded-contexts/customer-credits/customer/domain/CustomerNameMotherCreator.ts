@@ -1,6 +1,6 @@
 import { CustomerName } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerName'
 
-import { ObjectMotherCreator } from '../../shared/domain/ObjectMotherCreator'
+import { ObjectMotherCreator } from '../../../shared/domain/ObjectMotherCreator'
 
 export class CustomerNameMotherCreator {
   static random(): CustomerName {

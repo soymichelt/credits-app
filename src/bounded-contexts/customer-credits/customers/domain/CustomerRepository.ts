@@ -1,9 +1,9 @@
 import { Nullable } from '@/bounded-contexts/shared/domain/nullable'
 
+import { CustomerCreditEnabled } from '../../shared/domain/value-objects/CustomerCreditEnabled'
+import { CustomerId } from '../../shared/domain/value-objects/CustomerId'
 import { Customer } from './Customer'
-import { CustomerAvailableAmountOfCredit } from './value-objects/CustomerAvailableAmountOfCredit'
 import { CustomerDni } from './value-objects/CustomerDni'
-import { CustomerId } from './value-objects/CustomerId'
 
 export enum CustomerToShow {
   all,
@@ -16,8 +16,6 @@ export interface CustomerRepository {
 
   update(customer: Customer): Promise<void>
 
-  addAmountOfCredit(customerId: CustomerId, amount: CustomerAvailableAmountOfCredit): Promise<void>
-
   remove(customerId: CustomerId): Promise<void>
 
   select(customerId: CustomerId): Promise<Nullable<Customer>>
@@ -25,4 +23,6 @@ export interface CustomerRepository {
   selectByDni(customerDni: CustomerDni): Promise<Nullable<Customer>>
 
   all(filter?: CustomerToShow): Promise<Array<Customer>>
+
+  enableCreditToCustomer(customerId: CustomerId, enabled: CustomerCreditEnabled): Promise<void>
 }

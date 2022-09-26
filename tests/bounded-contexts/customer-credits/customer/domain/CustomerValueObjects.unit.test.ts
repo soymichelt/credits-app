@@ -39,13 +39,7 @@ describe('Customer Value Objects', () => {
     expect(customerPhone.value).toBeDefined()
   })
 
-  it('Creando Customer Available Amount of Credit', () => {
-    const customerAmount = CustomerMotherCreator.customerAmountRandom()
-
-    expect(customerAmount.value).toBeDefined()
-  })
-
-  it('Creando Customer Id con 30 caracteres', () => {
+  it('Creando Customer Id con 30 carácteres', () => {
     expect(() => {
       CustomerMotherCreator.customerIdInvalid()
     }).toThrow(InvalidArgumentError)
@@ -78,12 +72,6 @@ describe('Customer Value Objects', () => {
   it('Creando Customer Phone con formato de número extranjero', () => {
     expect(() => {
       CustomerMotherCreator.customerPhoneInvalid()
-    }).toThrow(InvalidArgumentError)
-  })
-
-  it('Creando Customer Available Amount of Credit con valores negativos', () => {
-    expect(() => {
-      CustomerMotherCreator.customerAmountInvalid()
     }).toThrow(InvalidArgumentError)
   })
 })

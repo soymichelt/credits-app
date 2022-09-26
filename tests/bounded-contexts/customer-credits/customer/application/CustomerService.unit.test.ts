@@ -1,15 +1,23 @@
+import { CreditService } from '@/bounded-contexts/customer-credits/credits/application/CreditService'
 import { CustomerService } from '@/bounded-contexts/customer-credits/customers/application/CustomerService'
 import { Customer } from '@/bounded-contexts/customer-credits/customers/domain/Customer'
 import { CustomerToShow } from '@/bounded-contexts/customer-credits/customers/domain/CustomerRepository'
 import { CustomerAlreadyExists } from '@/bounded-contexts/customer-credits/customers/domain/exceptions/CustomerAlreadyExists'
-import { CustomerAvailableAmountOfCredit } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerAvailableAmountOfCredit'
 
+import { CreditMotherCreator } from '../../credits/domain/CreditMotherCreator'
+import { CustomerCreditEnabledMotherCreator } from '../../shared/domain/CustomerCreditEnabledMotherCreator'
+import { UnitOfWorkMock } from '../../shared/infrastructure/__mocks__/UnitOfWorkMock'
 import { CustomerMotherCreator } from '../domain/CustomerMotherCreator'
-import { CustomerMockRepository } from '../infraestructure/__mocks__/CustomerMockRepository'
 
 describe('Customer Service', () => {
-  const repository = new CustomerMockRepository()
-  const customerService = new CustomerService(repository)
+  let customerService: CustomerService
+  let creditService: CreditService
+
+  beforeAll(() => {
+    const unitOfWork = new UnitOfWorkMock()
+    customerService = new CustomerService(unitOfWork)
+    creditService = new CreditService(unitOfWork)
+  })
 
   it('Agregando un Customer', async () => {
     const customer = CustomerMotherCreator.random()
@@ -34,8 +42,7 @@ describe('Customer Service', () => {
       ageDate: customer.ageDate.value,
       email: customer.email.value,
       phone: customer.phone.value,
-      income: customer.income.value,
-      amountAvailableOfCredit: customer.amountAvailableOfCredit.value
+      income: customer.income.value
     })
 
     await customerService.update(customerWithUpdates)
@@ -72,13 +79,12 @@ describe('Customer Service', () => {
     const customerId = customer.customerId
     await customerService.create(customer)
 
-    const newAmount = CustomerMotherCreator.customerAmountRandom()
-
-    await customerService.addAmountOfCredit(customerId, newAmount)
+    const newCredit = CreditMotherCreator.random(customerId)
+    await creditService.create(newCredit)
 
     const customerSelected = await customerService.select(customerId)
 
-    expect(customerSelected?.amountAvailableOfCredit.value).toBe(newAmount.value)
+    expect(customerSelected?.creditEnabled.value).toBeTruthy()
   })
 
   it('Seleccionando todos los Customers', async () => {
@@ -87,41 +93,21 @@ describe('Customer Service', () => {
     expect(customers.length).toBeGreaterThan(0)
   })
 
-  it('Agregando Customer y habilitar crédito de 10, 000', async () => {
-    const customer = CustomerMotherCreator.random()
-    const customerId = customer.customerId
-    await customerService.create(customer)
+  it('Creando customer sin crédito, habilitando crédito y seleccionando todos los Customers con crédito', async () => {
+    const newCustomerWithoutCredit = CustomerMotherCreator.random()
+    await customerService.create(newCustomerWithoutCredit)
+    const creditForNewCustomer = CreditMotherCreator.random(newCustomerWithoutCredit.customerId)
+    await creditService.create(creditForNewCustomer)
 
-    const newAmount = new CustomerAvailableAmountOfCredit(10000)
-
-    await customerService.addAmountOfCredit(customerId, newAmount)
-
-    const customerSelected = await customerService.select(customerId)
-
-    expect(customerSelected?.amountAvailableOfCredit.value).toBe(newAmount.value)
-  })
-
-  it('Agregando Customer y actualizar crédito a 0', async () => {
-    const customer = CustomerMotherCreator.random()
-    const customerId = customer.customerId
-    await customerService.create(customer)
-
-    const newAmount = new CustomerAvailableAmountOfCredit(0)
-
-    await customerService.addAmountOfCredit(customerId, newAmount)
-
-    const customerSelected = await customerService.select(customerId)
-
-    expect(customerSelected?.amountAvailableOfCredit.value).toBe(newAmount.value)
-  })
-
-  it('Seleccionando todos los Customers con crédito', async () => {
     const customers = await customerService.all(CustomerToShow.onlyWithCredit)
 
     expect(customers.length).toBeGreaterThanOrEqual(1)
   })
 
-  it('Seleccionando todos los Customers sin crédito', async () => {
+  it('Creando customer sin crédito y seleccionando todos los Customers sin crédito', async () => {
+    const newCustomerWithoutCredit = CustomerMotherCreator.random()
+    await customerService.create(newCustomerWithoutCredit)
+
     const customers = await customerService.all(CustomerToShow.onlyWithoutCredit)
 
     expect(customers.length).toBeGreaterThanOrEqual(1)
@@ -141,7 +127,7 @@ describe('Customer Service', () => {
       email: CustomerMotherCreator.customerEmailRandom(),
       phone: CustomerMotherCreator.customerPhoneRandom(),
       income: CustomerMotherCreator.customerIncomeRandom(),
-      amountAvailableOfCredit: CustomerMotherCreator.customerAmountRandom()
+      creditEnabled: CustomerCreditEnabledMotherCreator.random()
     })
 
     try {

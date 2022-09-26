@@ -1,10 +1,10 @@
 import { AggregateRoot } from '@/bounded-contexts/shared/domain/aggregate-root'
 
-import { CustomerAvailableAmountOfCredit } from './value-objects/CustomerAvailableAmountOfCredit'
+import { CustomerCreditEnabled } from '../../shared/domain/value-objects/CustomerCreditEnabled'
+import { CustomerId } from '../../shared/domain/value-objects/CustomerId'
 import { CustomerDateOfBirth } from './value-objects/CustomerDateOfBirth'
 import { CustomerDni } from './value-objects/CustomerDni'
 import { CustomerEmail } from './value-objects/CustomerEmail'
-import { CustomerId } from './value-objects/CustomerId'
 import { CustomerIncome } from './value-objects/CustomerIncome'
 import { CustomerName } from './value-objects/CustomerName'
 import { CustomerPhone } from './value-objects/CustomerPhone'
@@ -18,7 +18,7 @@ interface CustomerProps {
   email: CustomerEmail
   phone: CustomerPhone
   income: CustomerIncome
-  amountAvailableOfCredit: CustomerAvailableAmountOfCredit
+  creditEnabled: CustomerCreditEnabled
 }
 
 interface CustomerPrimitivesProps {
@@ -30,7 +30,7 @@ interface CustomerPrimitivesProps {
   email: string
   phone: string
   income: number
-  amountAvailableOfCredit?: number
+  creditEnabled?: boolean
 }
 
 export class Customer extends AggregateRoot {
@@ -42,19 +42,9 @@ export class Customer extends AggregateRoot {
   readonly email: CustomerEmail
   readonly phone: CustomerPhone
   readonly income: CustomerIncome
-  readonly amountAvailableOfCredit: CustomerAvailableAmountOfCredit
+  readonly creditEnabled: CustomerCreditEnabled
 
-  constructor({
-    customerId,
-    dni,
-    names,
-    lastnames,
-    ageDate,
-    email,
-    phone,
-    income,
-    amountAvailableOfCredit
-  }: CustomerProps) {
+  constructor({ customerId, dni, names, lastnames, ageDate, email, phone, income, creditEnabled }: CustomerProps) {
     super()
 
     this.customerId = customerId
@@ -65,22 +55,8 @@ export class Customer extends AggregateRoot {
     this.email = email
     this.phone = phone
     this.income = income
-    this.amountAvailableOfCredit = amountAvailableOfCredit
+    this.creditEnabled = creditEnabled
   }
-
-  // updateValues({
-  //   dni,
-  //   names,
-  //   lastnames,
-  //   ageDate,
-  //   email,
-  //   phone,
-  //   amountAvailableOfCredit
-  // }: CustomerPrimitivesProps): void {
-  //   if (dni !== this.dni.value) {
-  //     this.dni = new CustomerDni(dni)
-  //   }
-  // }
 
   static buildFromPrimitives({
     id: customerId,
@@ -91,7 +67,7 @@ export class Customer extends AggregateRoot {
     email,
     phone,
     income,
-    amountAvailableOfCredit
+    creditEnabled
   }: CustomerPrimitivesProps): Customer {
     return new Customer({
       customerId: new CustomerId(customerId),
@@ -102,7 +78,7 @@ export class Customer extends AggregateRoot {
       email: new CustomerEmail(email),
       phone: new CustomerPhone(phone),
       income: new CustomerIncome(income),
-      amountAvailableOfCredit: new CustomerAvailableAmountOfCredit(amountAvailableOfCredit || 0)
+      creditEnabled: new CustomerCreditEnabled(creditEnabled ?? false)
     })
   }
 
@@ -116,7 +92,7 @@ export class Customer extends AggregateRoot {
       email: this.email.value,
       phone: this.phone.value,
       income: this.income.value,
-      amountAvailableOfCredit: this.amountAvailableOfCredit.value || 0
+      creditEnabled: this.creditEnabled.value
     }
   }
 }

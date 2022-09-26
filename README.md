@@ -2,7 +2,7 @@
 
 ## Descripción
 
-Aplicación de prueba implementada con TypeScript, que sigue las pautas de **Domain Driven Design** y que fue diseñada usando como base la Arquitectura Hexagonal. La infraestructura de la aplicación cuenta de dos partes: los `controladores` que fueron desarrollados con ExpressJS y los `repositorios` implementan MongoDB. Para el desarrollo de pruebas el proyecto cuenta con la configuración de Jest.
+Aplicación de prueba implementada con TypeScript, que sigue las pautas de **Domain Driven Design** y que fue diseñada usando como base la Arquitectura Hexagonal. La infraestructura de la aplicación cuenta de dos partes: los `controladores` que fueron desarrollados con ExpressJS y los `repositorios` que implementan MongoDB. Para el desarrollo de pruebas el proyecto cuenta con la configuración de Jest.
 
 Para respetar las **buenas prácticas** el proyecto cuenta con una configuración de ESLint y de Prettier, con reglas bases de código y la guía de estilos de TypeScript recomendada. Ambos procesos se están ejecutando, en conjunto con los `tests`, en un sistema de Integración Continua (CI) y Despliegue Continuo (CD), que fue configurado usando GitHub Actions con Railway App. El CI y CD están escuchando los eventos de **Push** y **Pull Request** en la rama `Main`.
 
@@ -38,6 +38,12 @@ Para ejecutar el compilado de la carpeta `/dist` ejecute el comando `npm run sta
 
 Cuendo la aplicación está corriendo, expone una URL en el path `http://localhost:<YOUR PORT>/docs`. Ahí se encuentra la especificación de la API, desarrollada con **Swagger UI**, desde donde puedes consultar los diferentes endpoints disponibles.
 
+### Health check endpoint
+
+Utilice el endpoint `/health-check` para verificar que la API este ejecutándose correctamente 😎.
+
+### Customers endpoints
+
 - **GET** `/customer`: permite obtener todos los `Customers`. Este endpoint puede recibir un parametro de query `customerToShow`. Los valores permitidos para el parámetro son:
   - `0 = all`: Esta el valor por defecto y retorna todos los `Customers`.
   - `1 = onlyWithCredit`: Este valor permite seleccionar todos los `Customers` que tengan crédito habilitado.
@@ -58,7 +64,7 @@ La respuesta de este endpoint será lo siguiente:
       email	string
       phone	string
       income	number
-      amountAvailableOfCredit	number
+      creditEnabled	boolean
     }]
   }
 ```
@@ -80,7 +86,7 @@ La respuesta de este endpoint será lo siguiente:
       email	string
       phone	string
       icome	number
-      amountAvailableOfCredit	number
+      creditEnabled	boolean
     }
   }
 ```
@@ -117,13 +123,82 @@ La respuesta de este endpoint será lo siguiente:
 
 - **DELETE** `/customer/{id}`: permite eliminar un `Customer` filtrado por `{id}`.
 
-- PUT `/customer/{id}`: permite agregar un crédito a un `Customer` filtrado por `{id}`. Es requerido enviar por body los siguientes parámetros:
+### Credit endpoints
+
+- **GET** `/credit`: permite obtener todos los `Credits` filtrados por un rango de fechas. Este endpoint recibe dos parámetros de fechas con formato yyyy-MM-dd:
+
+  - `start` recibe un string con la fecha de inicio. Por ejemplo: 2022-09-25.
+  - `end` recibe un string con la fecha final del filtro. Por ejemplo: 2022-09-25.
+
+La respuesta de este endpoint será lo siguiente:
 
 ```
   {
-    amountAvailableOfCredit	number
+    message? string
+    error? string
+    data Array<Credit> [{
+      id	UUID
+      date	string
+      customerId	UUID
+      amount number
+    }]
   }
 ```
+
+- **GET** `/credit/{id}`: permite obtener un `Credit` filtrado por el parámetro `{id}`. El tipo del parámetro `{id}` debe ser de tipo UIID v4.
+
+La respuesta de este endpoint será lo siguiente:
+
+```
+  {
+    message? string
+    error? string
+    data Array<Credit> [{
+      id	UUID
+      date	string
+      customerId	UUID
+      amount number
+    }]
+  }
+```
+
+- **GET** `/credit/customer/{id}`: permite obtener un arreglo de `Credit` filtrado por el `{id}` de un cliente. El tipo del parámetro `{id}` debe ser de tipo UIID v4.
+
+La respuesta de este endpoint será lo siguiente:
+
+```
+  {
+    message? string
+    error? string
+    data Array<Credit> [{
+      id	UUID
+      date	string
+      customerId	UUID
+      amount number
+    }]
+  }
+```
+
+- **POST** `/credit`: permite crear un `Credit` asociado a un customer. Es requerido enviar por body los siguientes parámetros:
+
+```
+  {
+    id	UUID
+    date	string
+    customerId	UUID
+    amount number
+  }
+```
+
+- **PUT** `/credit/{id}`: permite actualizar el monto de un `Credit` asociado a un customer usando su `{id}`. Es requerido enviar por body los siguientes parámetros:
+
+```
+  {
+    amount number
+  }
+```
+
+- **DELETE** `/credit/{id}`: permite eliminar un `Credit` filtrado por `{id}`.
 
 ## Depuración
 

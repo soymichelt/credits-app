@@ -23,6 +23,10 @@ export class GuidValueObject {
     return new GuidValueObject(v4())
   }
 
+  equalTo(otherGuid: GuidValueObject): boolean {
+    return this.value === otherGuid.value
+  }
+
   toString(): string {
     return this.value
   }

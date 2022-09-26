@@ -1,6 +1,8 @@
 {
   "imports": [
     {"resource": "./app/application.json"},
-    {"resource": "./customer/application.json"}
+    {"resource": "./credit/application.json"},
+    {"resource": "./customer/application.json"},
+    {"resource": "./shared/application.json"}
   ]
 }

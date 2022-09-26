@@ -1,0 +1,8 @@
+{
+  "services": {
+    "CustomerCredits.shared.UnitOfWork": {
+      "class": "./../../../bounded-contexts/customer-credits/shared/infraestructure/UnitOfWork",
+      "arguments": []
+    }
+  }
+}

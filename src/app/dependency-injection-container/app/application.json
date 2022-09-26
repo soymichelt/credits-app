@@ -4,6 +4,10 @@
       "class": "./../../controllers/HealthCheckController",
       "arguments": []
     },
+    "App.controllers.CreditController": {
+      "class": "./../../controllers/CreditController",
+      "arguments": ["@CustomerCredits.credit.CreditService"]
+    },
     "App.controllers.CustomerController": {
       "class": "./../../controllers/CustomerController",
       "arguments": ["@CustomerCredits.customer.CustomerService"]

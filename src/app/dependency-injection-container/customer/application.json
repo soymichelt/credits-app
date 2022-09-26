@@ -6,7 +6,7 @@
     },
     "CustomerCredits.customer.CustomerService": {
       "class": "./../../../bounded-contexts/customer-credits/customers/application/CustomerService",
-      "arguments": ["@CustomerCredits.customer.CustomerMongoRepository"]
+      "arguments": ["@CustomerCredits.shared.UnitOfWork"]
     }
   }
 }

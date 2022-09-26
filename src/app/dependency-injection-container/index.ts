@@ -3,7 +3,9 @@ import { ContainerBuilder, JsonFileLoader } from 'node-dependency-injection'
 
 import appDI from './app/application.json'
 import application from './application.json'
+import creditDI from './credit/application.json'
 import customerDI from './customer/application.json'
+import sharedDI from './shared/application.json'
 
 export class DependencyInjectionContainer {
   private container: ContainerBuilder

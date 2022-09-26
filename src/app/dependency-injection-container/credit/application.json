@@ -1,0 +1,12 @@
+{
+  "services": {
+    "CustomerCredits.credit.CreditMongoRepository": {
+      "class": "./../../../bounded-contexts/customer-credits/credits/infraestructure/CreditMongoRepository",
+      "arguments": []
+    },
+    "CustomerCredits.credit.CreditService": {
+      "class": "./../../../bounded-contexts/customer-credits/credits/application/CreditService",
+      "arguments": ["@CustomerCredits.shared.UnitOfWork"]
+    }
+  }
+}

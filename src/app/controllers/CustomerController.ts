@@ -2,8 +2,7 @@ import { Request, Response } from 'express'
 
 import { CustomerService } from '@/bounded-contexts/customer-credits/customers/application/CustomerService'
 import { Customer } from '@/bounded-contexts/customer-credits/customers/domain/Customer'
-import { CustomerAvailableAmountOfCredit } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerAvailableAmountOfCredit'
-import { CustomerId } from '@/bounded-contexts/customer-credits/customers/domain/value-objects/CustomerId'
+import { CustomerId } from '@/bounded-contexts/customer-credits/shared/domain/value-objects/CustomerId'
 
 import { ResponseCallback, ResponseFactory } from '../helpers/ResponseFactory'
 import { BaseController } from './BaseController'
@@ -78,19 +77,6 @@ export class CustomerController implements BaseController {
 
       resCallback(200, {
         message: 'Customer updated successfull 😎'
-      })
-    })
-  }
-
-  async putAmountCredit(req: Request, res: Response) {
-    ResponseFactory.build(res, async (resCallback: ResponseCallback) => {
-      const customerId = new CustomerId(req.params.id)
-      const amount = new CustomerAvailableAmountOfCredit(req.body.amountAvailableOfCredit)
-
-      await this.service.addAmountOfCredit(customerId, amount)
-
-      resCallback(200, {
-        message: 'Customer credit registered successfull 😎'
       })
     })
   }

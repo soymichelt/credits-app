@@ -1,17 +1,13 @@
 import { Nullable } from '@/bounded-contexts/shared/domain/nullable'
 import { MongoRepository } from '@/bounded-contexts/shared/infraestructure/BaseMongoRepository'
 
+import { CustomerCreditEnabled } from '../../shared/domain/value-objects/CustomerCreditEnabled'
+import { CustomerId } from '../../shared/domain/value-objects/CustomerId'
 import { Customer } from '../domain/Customer'
 import { CustomerRepository, CustomerToShow } from '../domain/CustomerRepository'
-import { CustomerAvailableAmountOfCredit } from '../domain/value-objects/CustomerAvailableAmountOfCredit'
 import { CustomerDni } from '../domain/value-objects/CustomerDni'
-import { CustomerId } from '../domain/value-objects/CustomerId'
 
 export class CustomerMongoRepository extends MongoRepository<Customer> implements CustomerRepository {
-  protected moduleName(): string {
-    return 'customers'
-  }
-
   async create(customer: Customer): Promise<void> {
     await this.save(customer.customerId.value, customer)
   }
@@ -21,22 +17,10 @@ export class CustomerMongoRepository extends MongoRepository<Customer> implement
     if (!customerDoc) return
     const customerToUpdate = Customer.buildFromPrimitives({
       ...(customerDoc?.toPrimitive() || {}),
-      ...customer.toPrimitive(),
-      amountAvailableOfCredit: customerDoc?.amountAvailableOfCredit.value || 0
+      ...customer.toPrimitive()
     })
 
     await this.save(customer.customerId.value, customerToUpdate)
-  }
-
-  async addAmountOfCredit(customerId: CustomerId, amount: CustomerAvailableAmountOfCredit): Promise<void> {
-    const customerDoc = await this.select(customerId)
-    if (!customerDoc) return
-    const customerToUpdate = Customer.buildFromPrimitives({
-      ...customerDoc.toPrimitive(),
-      amountAvailableOfCredit: amount.value
-    })
-
-    await this.save(customerId.value, customerToUpdate)
   }
 
   async remove(customerId: CustomerId): Promise<void> {
@@ -61,7 +45,7 @@ export class CustomerMongoRepository extends MongoRepository<Customer> implement
       email: document.email,
       phone: document.phone,
       income: document.income ?? 0,
-      amountAvailableOfCredit: document.amountAvailableOfCredit ?? 0
+      creditEnabled: document.creditEnabled
     })
   }
 
@@ -82,7 +66,7 @@ export class CustomerMongoRepository extends MongoRepository<Customer> implement
       email: document.email,
       phone: document.phone,
       income: document.income ?? 0,
-      amountAvailableOfCredit: document.amountAvailableOfCredit ?? 0
+      creditEnabled: document.creditEnabled
     })
   }
 
@@ -92,11 +76,11 @@ export class CustomerMongoRepository extends MongoRepository<Customer> implement
     let filterExpression = {}
     switch (filter) {
       case CustomerToShow.onlyWithCredit: {
-        filterExpression = { amountAvailableOfCredit: { $gt: 0 } }
+        filterExpression = { creditEnabled: true }
         break
       }
       case CustomerToShow.onlyWithoutCredit: {
-        filterExpression = { amountAvailableOfCredit: { $eq: 0 } }
+        filterExpression = { creditEnabled: false }
         break
       }
     }
@@ -114,11 +98,20 @@ export class CustomerMongoRepository extends MongoRepository<Customer> implement
         email: document.email,
         phone: document.phone,
         income: document.income ?? 0,
-        amountAvailableOfCredit: document.amountAvailableOfCredit ?? 0
+        creditEnabled: document.creditEnabled
       })
       customers.push(customer)
     })
 
     return customers
+  }
+
+  async enableCreditToCustomer(customerId: CustomerId, enabled: CustomerCreditEnabled): Promise<void> {
+    const collection = await this.collection()
+    await collection.updateOne({ _id: customerId.value }, { $set: { creditEnabled: enabled.value } })
+  }
+
+  protected moduleName(): string {
+    return 'customers'
   }
 }

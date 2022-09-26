@@ -128,29 +128,132 @@
         }
       }
     },
-    "/customer/{id}/available-credit": {
+    "/credit": {
+      "get": {
+        "tags": ["Credit"],
+        "summary": "Get all credits filtered by range dates",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Start date. Ej: 2022-09-25",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "description": "End date. Ej: 2022-09-25",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "schema": {
+            "$ref": "#/definitions/ApiResponse"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Credit"],
+        "summary": "Create new credit",
+        "parameters": [
+          {
+            "name": "credit",
+            "in": "body",
+            "description": "Credit that we want to create",
+            "schema": {
+              "$ref": "#/definitions/Credit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "schema": {
+            "$ref": "#/definitions/ApiResponse"
+          }
+        }
+      }
+    },
+    "/credit/{id}": {
       "parameters": [
         {
           "name": "id",
           "in": "path",
           "required": true,
-          "description": "ID of Customer that we want to find",
+          "description": "ID of Credit that we want to find",
           "type": "string"
         }
       ],
+      "get": {
+        "tags": ["Credit"],
+        "summary": "Get Credit by ID",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "schema": {
+            "$ref": "#/definitions/ApiResponse"
+          }
+        }
+      },
       "put": {
-        "tags": ["Customer"],
-        "summary": "Update available amount of credit to customer by ID",
+        "tags": ["Credit"],
+        "summary": "Update credit amount by ID",
         "parameters": [
           {
-            "name": "customer",
+            "name": "credit",
             "in": "body",
-            "description": "Customer that we want to create",
+            "description": "Credit that we want to update",
             "schema": {
-              "$ref": "#/definitions/CustomerUpdateAmount"
+              "$ref": "#/definitions/CreditUpdate"
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "schema": {
+            "$ref": "#/definitions/ApiResponse"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Credit by ID",
+        "tags": ["Credit"],
+        "responses": {
+          "200": {
+            "description": "Credit is deleted",
+            "schema": {
+              "$ref": "#/definitions/ApiResponse"
+            }
+          }
+        }
+      }
+    },
+    "/credit/customer/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of Customer",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Credit"],
+        "summary": "Get Credits by Customer ID",
         "responses": {
           "200": {
             "description": "OK"
@@ -188,9 +291,6 @@
         },
         "income": {
           "type": "number"
-        },
-        "amountAvailableOfCredit": {
-          "type": "number"
         }
       }
     },
@@ -222,6 +322,29 @@
         }
       }
     },
+    "Credit": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "customerId": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "number"
+        }
+      }
+    },
+    "CreditUpdate": {
+      "properties": {
+        "amount": {
+          "type": "number"
+        }
+      }
+    },
     "DataResponse": {
       "properties": {
         "customer": {
@@ -231,6 +354,14 @@
         "customers": {
           "type": "array",
           "$ref": "#/definitions/Customer"
+        },
+        "credit": {
+          "type": "object",
+          "$ref": "#/definitions/Credit"
+        },
+        "credits": {
+          "type": "array",
+          "$ref": "#/definitions/Credit"
         }
       }
     },
@@ -245,13 +376,6 @@
         "data": {
           "type": "object",
           "$ref": "#/definitions/DataResponse"
-        }
-      }
-    },
-    "CustomerUpdateAmount": {
-      "properties": {
-        "amountAvailableOfCredit": {
-          "type": "number"
         }
       }
     }
